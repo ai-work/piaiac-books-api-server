@@ -6,10 +6,10 @@ export async function GET(request: Request, { params }: {
   }) {
     
     const pool = new Pool({ connectionString: process.env.DATABASE_URL });
-    const data = await pool.query(`SELECT * FROM books WHERE id = ${params.id}`);
-    console.log(data);
+    const { rows } = await pool.query(`SELECT * FROM books WHERE id = ${params.id}`);
+    console.log(rows);
     // event.waitUntil(pool.end());  // doesn't hold up the response
-    return new Response(JSON.stringify(data));
+    return new Response(JSON.stringify(rows));
 }
 
 export const runtime = 'edge';
