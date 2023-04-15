@@ -1,5 +1,4 @@
 import { Pool } from '@neondatabase/serverless';
-// import type { NextRequest, NextFetchEvent } from 'next/server';
 
 export async function GET(request: Request) {
     
@@ -10,5 +9,3 @@ export async function GET(request: Request) {
 }
 
 export const runtime = 'edge';
-
-// export default async (req: NextRequest, event: NextFetchEvent) => {
