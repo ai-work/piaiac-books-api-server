@@ -15,7 +15,7 @@ async function verify(token: string, secret: string): Promise<any> {
 }
 
 // This function can be marked `async` if using `await` inside
-export function middleware(request: NextRequest, ) {
+export async function middleware(request: NextRequest, ) {
     let jwtAuthToken = request.headers.get('Authorization');
     console.log(jwtAuthToken);
     let response: NextResponse;
@@ -31,7 +31,7 @@ export function middleware(request: NextRequest, ) {
         if (jwtAuthToken.toLowerCase().startsWith('bearer')) {
             jwtAuthToken = jwtAuthToken.slice('bearer'.length).trim();
             console.log('jwtAuthToken:', jwtAuthToken);
-            decodedToken = verify(jwtAuthToken, process.env.JWT_SECRET as string);
+            decodedToken = await verify(jwtAuthToken, process.env.JWT_SECRET as string);
             console.log('decoded:',decodedToken);
 
             // const hasAccessToEndpoint = config.matcher.some(
@@ -52,8 +52,8 @@ export function middleware(request: NextRequest, ) {
             // You can also set request headers in NextResponse.rewrite
             response = NextResponse.next({
                 request: {
-                // New request headers
-                headers: requestHeaders,
+                    // New request headers
+                    headers: requestHeaders,
                 },
             });
         } else {
