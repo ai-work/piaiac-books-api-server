@@ -22,9 +22,9 @@ export async function GET(request: Request, { params }: {
         });
     } else {
         console.log(JSON.stringify(rows[0]));
-        console.log(rows[0].createdBy);
+        console.log(rows[0].createdby);
         console.log(apiClientId);
-        if (rows[0].createdBy !== apiClientId) {
+        if (rows[0].createdby !== apiClientId) {
             content = JSON.stringify({message: 'order not found for this user'});
         } else {
             content = JSON.stringify(rows[0]);
@@ -50,7 +50,7 @@ export async function DELETE(request: Request, { params }: {
         content = JSON.stringify({
             "error":`No order with id ${params.id}`
         });
-    } else if (rows[0].createdBy !== apiClientId) {
+    } else if (rows[0].createdby !== apiClientId) {
         content = JSON.stringify({message: 'order not found for this user'});
     } else {
         await pool.query('DELETE FROM orders WHERE id = $1', [params.id]);
