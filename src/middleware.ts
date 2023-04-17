@@ -32,6 +32,7 @@ export function middleware(request: NextRequest, ) {
             jwtAuthToken = jwtAuthToken.slice('bearer'.length).trim();
             console.log(jwtAuthToken);
             decodedToken = verify(jwtAuthToken, process.env.JWT_SECRET as string);
+            console.log(decodedToken);
 
             // const hasAccessToEndpoint = config.matcher.some(
             //     (at: string) => decodedToken.accessTypes.some((uat:string) => uat === at)
