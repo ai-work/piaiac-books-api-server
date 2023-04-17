@@ -9,7 +9,7 @@ async function verify(token: string, secret: string): Promise<any> {
     //{ apiClientId: string, clientName: string, clientEmail: string, accessPermissions: string }
     const {payload} = await jwtVerify(token, new TextEncoder().encode(secret));
     // run some checks on the returned payload, perhaps you expect some specific values
-    console.log(JSON.stringify(payload));
+    console.log('in verify: ', JSON.stringify(payload));
     // if its all good, return it, or perhaps just return a boolean
     return payload;
 }
@@ -30,9 +30,9 @@ export function middleware(request: NextRequest, ) {
         let decodedToken: any;
         if (jwtAuthToken.toLowerCase().startsWith('bearer')) {
             jwtAuthToken = jwtAuthToken.slice('bearer'.length).trim();
-            console.log(jwtAuthToken);
+            console.log('jwtAuthToken:', jwtAuthToken);
             decodedToken = verify(jwtAuthToken, process.env.JWT_SECRET as string);
-            console.log(decodedToken);
+            console.log('decoded:',decodedToken);
 
             // const hasAccessToEndpoint = config.matcher.some(
             //     (at: string) => decodedToken.accessTypes.some((uat:string) => uat === at)
