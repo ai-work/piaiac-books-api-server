@@ -1,10 +1,12 @@
 import { Pool } from '@neondatabase/serverless';
+import { headers } from 'next/headers';
 
 export async function GET(request: Request, { params }: {
     params: { id: string }
   }) {
     
-    const apiClientId = request.headers.get('x-api-client-id-from-middleware');
+    const headersList = headers();
+    const apiClientId = headersList.get('x-api-client-id-from-middleware');
     console.log('apiClientId in GET /orders/id:', apiClientId);
 
     const pool = new Pool({ connectionString: process.env.DATABASE_URL });
@@ -33,7 +35,8 @@ export async function DELETE(request: Request, { params }: {
     params: { id: string }
   }) {
 
-    const apiClientId = request.headers.get('x-api-client-id-from-middleware');
+    const headersList = headers();
+    const apiClientId = headersList.get('x-api-client-id-from-middleware');
     console.log('apiClientId in DELETE /orders/id:', apiClientId);
 
     const pool = new Pool({ connectionString: process.env.DATABASE_URL });

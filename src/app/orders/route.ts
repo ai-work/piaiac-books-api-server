@@ -1,8 +1,10 @@
 import { Pool } from '@neondatabase/serverless';
+import { headers } from 'next/headers';
 
 export async function GET(request: Request) {
     
-    const apiClientId = request.headers.get('x-api-client-id-from-middleware');
+    const headersList = headers();
+    const apiClientId = headersList.get('x-api-client-id-from-middleware');
     const pool = new Pool({ connectionString: process.env.DATABASE_URL });
     const { rows } = await pool.query('SELECT * FROM orders WHERE createdBy = $1 ', [apiClientId]);
     // event.waitUntil(pool.end());  // doesn't hold up the response
@@ -16,7 +18,8 @@ export async function POST(request: Request) {
         quantity = 1;
     }
 
-    const apiClientId = request.headers.get('x-api-client-id-from-middleware');
+    const headersList = headers();
+    const apiClientId = headersList.get('x-api-client-id-from-middleware');
     console.log('apiClientId in POST /orders:', apiClientId);
 
     const pool = new Pool({ connectionString: process.env.DATABASE_URL });
