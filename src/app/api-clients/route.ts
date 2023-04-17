@@ -26,12 +26,17 @@ async function sign(payload: { apiClientId: string, clientName: string, clientEm
 }
 
 export async function POST(request: Request) {
-    const {clientName }: {apiClientId: string, clientName: string, clientEmail: string, accessPermissions: string} = await request.json();
+    const {clientName, clientEmail }: {apiClientId: string, clientName: string, clientEmail: string, accessPermissions: string} = await request.json();
 
+    if (!clientName || !clientEmail) {
+        return new Response(
+            JSON.stringify({ success: false, message: 'clientName and clientEmail must be provided' }),
+            { status: 401, headers: { 'content-type': 'application/json' } }
+        );
+    }
     const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
-    const clientEmail = '';
-    const { rows } = await pool.query('SELECT * FROM api_clients WHERE apiClientId = $1', ['clientId from middleware']);
+    const { rows } = await pool.query('SELECT * FROM api_clients WHERE clientName = $1 AND clientEmail = $2', [clientName, clientEmail]);
     let apiClientId: string = '';
     if (!rows || rows.length === 0) {
         const data1 = await pool.query('INSERT INTO api_clients(id, clientName, clientEmail) VALUES($1, $2, $3) RETURNING id', 
