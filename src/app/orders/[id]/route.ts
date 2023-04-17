@@ -8,16 +8,18 @@ export async function GET(request: Request, { params }: {
     const { rows } = await pool.query('SELECT * FROM orders WHERE id = $1',[params.id]);
     
     let content: string;
+
+    console.log(rows);
+
     if (!rows || rows.length === 0) {
         content = JSON.stringify({
             "error":`No order with id ${params.id}`
         });
     } else {
-        JSON.stringify(rows[0]);
+        content = JSON.stringify(rows[0]);
     }
-    console.log(rows);
     // event.waitUntil(pool.end());  // doesn't hold up the response
-    return new Response();
+    return new Response(content);
 }
 
 export async function DELETE(request: Request, { params }: {
