@@ -14,7 +14,7 @@ export async function POST(request: Request) {
 
     const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
-    const { rows } = await pool.query('INSERT INTO orders(id, bookId, customerName, created, createdBy, quantity, timestamp) VALUES($1, $2, $3, $4, $5, $6) RETURNING id, created', 
+    const { rows } = await pool.query('INSERT INTO orders(id, bookId, customerName, created, createdBy, quantity, timestamp) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING id, created', 
                                     [randomHash(21), bookId, customerName, true, 'self',quantity, (new Date).getTime()])
 
     // event.waitUntil(pool.end());  // doesn't hold up the response
