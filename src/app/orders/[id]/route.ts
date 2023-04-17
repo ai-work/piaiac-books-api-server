@@ -5,7 +5,7 @@ export async function GET(request: Request, { params }: {
   }) {
     
     const pool = new Pool({ connectionString: process.env.DATABASE_URL });
-    const { rows } = await pool.query(`SELECT * FROM order WHERE id = ${params.id}`);
+    const { rows } = await pool.query('SELECT * FROM orders WHERE id = $1',[params.id]);
     
     let content: string;
     if (!rows || rows.length === 0) {
@@ -25,7 +25,7 @@ export async function DELETE(request: Request, { params }: {
   }) {
 
     const pool = new Pool({ connectionString: process.env.DATABASE_URL });
-    const { rows } = await pool.query(`SELECT * FROM orders WHERE id = ${params.id}`);
+    const { rows } = await pool.query('SELECT * FROM orders WHERE id = $1', [params.id]);
     
     let content: string;
     if (!rows || rows.length === 0) {

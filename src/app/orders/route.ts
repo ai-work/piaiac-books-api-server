@@ -13,7 +13,7 @@ export async function POST(request: Request) {
                                     [randomHash(21), bookId, customerName, true, 'self',quantity, Math.floor((new Date).getTime()/1000)])
 
     // event.waitUntil(pool.end());  // doesn't hold up the response
-    return new Response(JSON.stringify({rorderId: rows[0].id, created: rows[0].created}));
+    return new Response(JSON.stringify({ orderId: rows[0].id, created: rows[0].created}));
 }
 
 function randomHash(length: number) {
