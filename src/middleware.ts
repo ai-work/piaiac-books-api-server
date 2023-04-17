@@ -1,14 +1,15 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { headers } from 'next/dist/client/components/headers';
 
 // This function can be marked `async` if using `await` inside
 export function middleware(request: NextRequest) {
     console.log('middleware hit');
-    console.log(JSON.stringify(headers));
+    console.log(JSON.stringify(request.headers));
     console.log(request.url);
     console.log(request.method);
 
+    const currentAuthToken = request.headers.get('Authorization');
+    console.log(currentAuthToken);
     // const requestHeaders = new Headers(request.headers)
     // requestHeaders.set('Content-Type', 'application/json');
     // requestHeaders.set('Access-Control-Allow-Origin','*');
@@ -26,7 +27,7 @@ export function middleware(request: NextRequest) {
     // Set new response headers
     const response = NextResponse.next();
     response.headers.set('Content-Type', 'application/json');
-    response.headers.set('Access-Control-Allow-Origin','*');
+    // response.headers.set('Access-Control-Allow-Origin','*');
     return response;
 }
 
