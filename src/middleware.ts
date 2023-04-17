@@ -31,8 +31,16 @@ export async function middleware(request: NextRequest, ) {
         if (jwtAuthToken.toLowerCase().startsWith('bearer')) {
             jwtAuthToken = jwtAuthToken.slice('bearer'.length).trim();
             console.log('jwtAuthToken:', jwtAuthToken);
-            decodedToken = await verify(jwtAuthToken, process.env.JWT_SECRET as string);
-            console.log('decoded:',decodedToken);
+            try {
+                decodedToken = await verify(jwtAuthToken, process.env.JWT_SECRET as string);
+                console.log('decoded:',decodedToken);
+            } catch (e:any) {
+                console.log(e.message);
+                return new NextResponse(
+                    JSON.stringify({ success: false, message: 'invalid token provided' }),
+                    { status: 401, headers: { 'content-type': 'application/json' } }
+                );
+            }
 
             // const hasAccessToEndpoint = config.matcher.some(
             //     (at: string) => decodedToken.accessTypes.some((uat:string) => uat === at)
