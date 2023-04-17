@@ -24,3 +24,5 @@ export async function POST() {
 
     // return NextResponse.json(data);
 }
+
+export const runtime = 'edge';
