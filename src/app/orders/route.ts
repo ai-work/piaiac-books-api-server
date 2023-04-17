@@ -2,7 +2,7 @@ import { Pool } from '@neondatabase/serverless';
 
 export async function GET(request: Request) {
     
-    const apiClientId = '';
+    const apiClientId = request.headers.get('x-api-client-id-from-middleware');
     const pool = new Pool({ connectionString: process.env.DATABASE_URL });
     const { rows } = await pool.query('SELECT * FROM orders WHERE createdBy = $1 ', [apiClientId]);
     // event.waitUntil(pool.end());  // doesn't hold up the response
@@ -16,10 +16,13 @@ export async function POST(request: Request) {
         quantity = 1;
     }
 
+    const apiClientId = request.headers.get('x-api-client-id-from-middleware');
+    console.log('apiClientId in POST /orders:', apiClientId);
+
     const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
     const { rows } = await pool.query('INSERT INTO orders(id, bookId, customerName, created, createdBy, quantity, timestamp) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING id, created', 
-                                    [randomHash(21), bookId, customerName, true, 'self',quantity, Math.floor((new Date).getTime()/1000)])
+                                    [randomHash(21), bookId, customerName, true, apiClientId, quantity, Math.floor((new Date).getTime()/1000)])
 
     // event.waitUntil(pool.end());  // doesn't hold up the response
     return new Response(JSON.stringify({ orderId: rows[0].id, created: rows[0].created}));
