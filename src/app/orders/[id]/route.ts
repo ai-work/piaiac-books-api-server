@@ -29,17 +29,18 @@ export async function DELETE(request: Request, { params }: {
     const pool = new Pool({ connectionString: process.env.DATABASE_URL });
     const { rows } = await pool.query('SELECT * FROM orders WHERE id = $1', [params.id]);
     
-    let content: string;
+    let content: string = '';
     if (!rows || rows.length === 0) {
         content = JSON.stringify({
             "error":`No order with id ${params.id}`
         });
     } else {
-        await pool.query(`DELETE FROM orders WHERE id = ${params.id}`);
+        await pool.query('DELETE FROM orders WHERE id = $1', [params.id]);
+        content = JSON.stringify({ message: `Order with id ${params.id} deleted`})
     }
 
     // event.waitUntil(pool.end());  // doesn't hold up the response
-    return new Response();
+    return new Response(content);
 }
 
 export const runtime = 'edge';

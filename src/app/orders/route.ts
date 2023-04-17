@@ -1,5 +1,14 @@
 import { Pool } from '@neondatabase/serverless';
 
+export async function GET(request: Request) {
+    
+    const clientId = 1;
+    const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+    const { rows } = await pool.query('SELECT * FROM orders WHERE createdBy = $1 ', [clientId]);
+    // event.waitUntil(pool.end());  // doesn't hold up the response
+    return new Response(JSON.stringify(rows));
+}
+
 export async function POST(request: Request) {
     
     let  { bookId, quantity, customerName }: {bookId: number, quantity: number, customerName: string} = await request.json();
