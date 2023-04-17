@@ -21,6 +21,8 @@ export async function GET(request: Request, { params }: {
             "error":`No order with id ${params.id}`
         });
     } else {
+        console.log(rows[0].createdBy);
+        console.log(apiClientId);
         if (rows[0].createdBy !== apiClientId) {
             content = JSON.stringify({message: 'order not found for this user'});
         } else {
