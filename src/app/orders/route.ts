@@ -2,9 +2,9 @@ import { Pool } from '@neondatabase/serverless';
 
 export async function GET(request: Request) {
     
-    const clientId = 1;
+    const apiClientId = '';
     const pool = new Pool({ connectionString: process.env.DATABASE_URL });
-    const { rows } = await pool.query('SELECT * FROM orders WHERE createdBy = $1 ', [clientId]);
+    const { rows } = await pool.query('SELECT * FROM orders WHERE createdBy = $1 ', [apiClientId]);
     // event.waitUntil(pool.end());  // doesn't hold up the response
     return new Response(JSON.stringify(rows));
 }
@@ -35,6 +35,6 @@ function randomHash(length: number) {
     }
   
     return buf;
-  }
+}
 
 export const runtime = 'edge';
